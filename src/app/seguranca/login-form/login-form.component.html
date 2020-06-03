@@ -1,0 +1,33 @@
+<form [formGroup]="form" (ngSubmit)="login3()">
+    <mat-card>
+        <mat-card-header>
+            Login
+        </mat-card-header>
+
+        <mat-card-content>
+            <div class="row">
+                <div class="col">
+                    <mat-form-field class="full-width">
+                        <mat-label>Email</mat-label>
+                        <input matInput placeholder="Email" formControlName="email">
+                        <mat-error *ngIf="form.controls['email'].errors">
+                            {{MostrarMsgErroControl('email')}}
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col">
+                    <mat-form-field class="full-width">
+                        <mat-label>Senha</mat-label>
+                        <input type="password" matInput placeholder="Senha" formControlName="senha">
+                        <mat-error *ngIf="form.controls['senha'].errors">
+                            {{MostrarMsgErroControl('senha')}}
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+        </mat-card-content>
+        <mat-card-actions>
+            <button mat-raised-button color="primary">Login</button>
+        </mat-card-actions>
+    </mat-card>
+</form>

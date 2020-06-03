@@ -1,0 +1,12 @@
+<h1 mat-dialog-title>Cadastro rápido {{data.id}}</h1>
+<div mat-dialog-content>
+  <p>Nome da categoria</p>
+  <mat-form-field>
+    <mat-label>Categoria</mat-label>
+    <input matInput [(ngModel)]="data.nome">
+  </mat-form-field>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onNoClick()" cdkFocusInitial>Cancelar</button>
+  <button mat-button [mat-dialog-close]="data" (click)="onConfirmClick()">Ok</button>
+</div>

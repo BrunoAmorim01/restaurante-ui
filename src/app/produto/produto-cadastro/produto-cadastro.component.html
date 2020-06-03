@@ -1,0 +1,179 @@
+<form [formGroup]="form" novalidate (ngSubmit)="onSubmit()">
+  <mat-card class="form-card">
+    <mat-card-header>
+      <mat-card-title>Cadastro de produto</mat-card-title>
+
+      <mat-card-subtitle *ngIf="form.controls['id'].value">Produto n° {{form.controls['id'].value }}</mat-card-subtitle>
+      <div >
+        <a mat-flat-button color="primary" [routerLink]="['/produto/novo']"
+          >Novo produto</a
+        >
+      </div>
+    </mat-card-header>
+    
+    <mat-card-content>
+      <div class="row">
+        <div class="col">
+          <mat-form-field class="full-width">
+            <mat-label>Nome do produto</mat-label>
+            <input
+              matInput
+              placeholder="Nome do produto"
+              formControlName="nome"
+            />
+
+            <mat-error *ngIf="form.controls['nome'].errors">
+              {{ MostrarMsgErroControl("nome") }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col">
+          <mat-form-field class="full-width">
+            <mat-label>Descrição do produto</mat-label>
+            <textarea
+              matInput
+              placeholder="Descrição do produto"
+              formControlName="descricao"
+            ></textarea>
+            <mat-error *ngIf="form.controls['descricao'].errors">
+              {{ MostrarMsgErroControl("descricao") }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="row">
+        <button
+          mat-icon-button
+          matTooltip="Nova categoria"
+          (click)="onCadastroRapido()"
+          type="button"
+        >
+          <mat-icon>add</mat-icon>
+        </button>
+        <div class="col">
+          <mat-form-field class="full-width">
+            <mat-label>Categoria </mat-label>
+            <mat-select
+              id="categoria"
+              placeholder="Categoria"
+              formControlName="categoria"
+              name="categoria"
+            >
+              <mat-option>--</mat-option>
+              <mat-option
+                *ngFor="let categoria of categorias$ | async"
+                [value]="categoria.id"
+              >
+                {{ categoria.nome }}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="form.controls['categoria'].hasError('required')">
+              Categoria é <strong>obrigatório</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+       
+      </div>
+
+      <div class="row">
+        <div class="col">
+          <mat-form-field class="full-width">
+            <mat-label>Preço</mat-label>
+            <input
+              matInput
+              placeholder="Preço"
+              formControlName="preco"
+              currencyMask
+              [options]="{ prefix: 'R$ ', thousands: '.', decimal: ',' }"
+              max="999999.99"
+            />
+
+            <mat-error *ngIf="form.controls['preco'].errors">
+              {{ MostrarMsgErroControl("preco") }}
+            </mat-error>
+            
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col">
+          <mat-label>Origem</mat-label>
+          <mat-radio-group
+            aria-label="Select an option"
+            class="example-radio-group"
+            formControlName="origem"
+          >
+            <mat-radio-button
+              *ngFor="let origem of origens"
+              [value]="origem.id"
+            >
+              {{ origem.desc }}
+            </mat-radio-button>
+          </mat-radio-group>
+        </div>
+
+        <div class="col">
+          <mat-label>Produto Ativo ? </mat-label>
+          <mat-slide-toggle formControlName="status"></mat-slide-toggle>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col">
+          <mat-form-field class="full-width">
+            <mat-label>Quantidade em estoque</mat-label>
+            <input
+              matInput
+              mask="99999"
+              placeholder="Quantidade"
+              formControlName="quantidade"
+            />
+            <mat-error *ngIf="form.controls['quantidade'].errors">
+              {{ MostrarMsgErroControl("quantidade") }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col">
+          <input
+            id="customFile"
+            type="file"
+            (change)="selectFile($event)"
+            multiple
+          />
+          <div *ngIf="retrievedImage" style="text-align: center; ">
+            <img [src]="retrievedImage" width="100" height="200" />
+          </div>
+        </div>
+      </div>
+    </mat-card-content>
+    <mat-card-actions>
+      <button mat-raised-button color="primary" type="submit">Salvar</button>
+      <button
+        *ngIf="form.controls['id'].value"
+        mat-raised-button
+        color="warn"
+        (click)="excluir()"
+        type="button"
+      >
+        Excluir
+      </button>
+      <button
+        mat-raised-button
+        type="button"
+        color="primary"
+        (click)="upload()"
+      >
+        upload arquivo
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</form>

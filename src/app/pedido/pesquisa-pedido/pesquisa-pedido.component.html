@@ -1,0 +1,112 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+  <mat-card class="form-card">
+    <mat-card-header>
+      <mat-card-title>Pesquisa de pedidos</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      
+      <div class="row">
+        <div class="col">
+          <mat-form-field class="full-width">
+            <mat-label>Data Inicio</mat-label>
+            <input
+              matInput
+              [matDatepicker]="inicio"
+              formControlName="dataInicio"
+            />
+            <mat-datepicker-toggle
+              matSuffix
+              [for]="inicio"
+            ></mat-datepicker-toggle>
+            <mat-datepicker #inicio></mat-datepicker>
+          </mat-form-field>
+        </div>
+
+        <div class="col">
+          <mat-form-field class="full-width">
+            <mat-label>Data Fim</mat-label>
+            <input matInput [matDatepicker]="fim" formControlName="dataFim" />
+            <mat-datepicker-toggle
+              matSuffix
+              [for]="fim"
+            ></mat-datepicker-toggle>
+            <mat-datepicker #fim></mat-datepicker>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <section class="section-form ">
+        <mat-label>Status</mat-label>
+        <div *ngFor="let status of statusPedido">
+          <mat-checkbox
+            style="margin: 0 10px;"
+            [value]="status"
+            (change)="onChangeCheckBox($event)"
+            >{{ status }}
+          </mat-checkbox>
+        </div>
+      </section>
+    </mat-card-content>
+    <mat-card-actions>
+      <button mat-raised-button color="primary" type="submit">Pesquisar</button>
+    </mat-card-actions>
+  </mat-card>
+</form>
+
+<mat-card class="form-card">
+  <div class="loading-shade" *ngIf="isLoadingResults">
+    <mat-spinner></mat-spinner>
+  </div>
+  <mat-card-header>
+    <mat-card-title>Pedidos encontrados</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <table matTableResponsive mat-table [dataSource]="dataSource" matSort>
+      <ng-container matColumnDef="codigo">
+        <th mat-header-cell *matHeaderCellDef>Codigo</th>
+        <td mat-cell *matCellDef="let element">{{ element.id }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="dataCriacao">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Data</th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.dataCriacao | date: "short" }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="statusPedido">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
+        <td mat-cell *matCellDef="let element">{{ element.statusPedido }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="total">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Total</th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.total | currency }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="opcoes">
+        <th mat-header-cell *matHeaderCellDef>Ações</th>
+        <td mat-cell *matCellDef="let element">
+          <button
+            mat-button
+            mat-icon-button
+            type="button"
+            color="primary"
+            [routerLink]="['/pedido/', element.id]"
+          >
+            <mat-icon>edit</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+    <div *ngIf="dataSource.data.length === 0">
+      Nenhum pedido encontrado
+    </div>
+    <mat-paginator></mat-paginator>
+  </mat-card-content>
+</mat-card>
