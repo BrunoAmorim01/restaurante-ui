@@ -1,24 +1,24 @@
-import { HttpEvent, HttpEventType } from '@angular/common/http';
-import { Categoria } from './../model/Categoria';
-import { ArquivoService } from './../../shared/arquivo.service';
-import { SnackBarMessageService } from './../../shared/snack-bar-message.service';
-import { ConfirmModalComponent } from './../../shared/confirm-modal/confirm-modal.component';
-import { CadastroRapidoComponent } from './../../categoria/cadastro-rapido/cadastro-rapido.component';
-import { MessagesService } from './../../shared/messages.service';
-import { Produto } from './../model/Produto';
-import { ActivatedRoute, Router } from '@angular/router';
-import { ProdutoService } from './../service/produto.service';
-import { Observable, Subscription, EMPTY } from 'rxjs';
-import { CategoriaService } from './../service/categoria.service';
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { FormBuilder, Validators, FormGroup } from '@angular/forms';
-import { catchError, take, tap, switchMap } from 'rxjs/operators';
-import { MatDialog } from '@angular/material/dialog';
+import { HttpEvent, HttpEventType } from "@angular/common/http";
+import { Categoria } from "./../model/Categoria";
+import { ArquivoService } from "./../../shared/arquivo.service";
+import { SnackBarMessageService } from "./../../shared/snack-bar-message.service";
+import { ConfirmModalComponent } from "./../../shared/confirm-modal/confirm-modal.component";
+import { CadastroRapidoComponent } from "./../../categoria/cadastro-rapido/cadastro-rapido.component";
+import { MessagesService } from "./../../shared/messages.service";
+import { Produto } from "./../model/Produto";
+import { ActivatedRoute, Router } from "@angular/router";
+import { ProdutoService } from "./../service/produto.service";
+import { Observable, Subscription, EMPTY } from "rxjs";
+import { CategoriaService } from "./../service/categoria.service";
+import { Component, OnInit, OnDestroy } from "@angular/core";
+import { FormBuilder, Validators, FormGroup } from "@angular/forms";
+import { catchError, take, tap, switchMap } from "rxjs/operators";
+import { MatDialog } from "@angular/material/dialog";
 
 @Component({
-  selector: 'app-produto-cadastro',
-  templateUrl: './produto-cadastro.component.html',
-  styleUrls: ['./produto-cadastro.component.scss'],
+  selector: "app-produto-cadastro",
+  templateUrl: "./produto-cadastro.component.html",
+  styleUrls: ["./produto-cadastro.component.scss"],
 })
 export class ProdutoCadastroComponent implements OnInit, OnDestroy {
   obs = true;
@@ -46,10 +46,10 @@ export class ProdutoCadastroComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.produto = this.activatedRoute.snapshot.data.produto;
-    console.log('produto retornado', this.produto);
+    console.log("produto retornado", this.produto);
     this.origens = [
-      { id: 'NACIONAL', desc: 'Nacional' },
-      { id: 'INTERNACIONAL', desc: 'Internacional' },
+      { id: "NACIONAL", desc: "Nacional" },
+      { id: "INTERNACIONAL", desc: "Internacional" },
     ];
 
     if (this.produto === undefined || this.produto === null) {
@@ -117,23 +117,23 @@ export class ProdutoCadastroComponent implements OnInit, OnDestroy {
             this.form.patchValue({
               categoria: this.produto.categoria.id,
             });
-            console.log('produto salvo', p);
+            console.log("produto salvo", p);
           })
         )
         .subscribe(
           (success) => {
             this.snackBarMessageService.openSnackbar(
-              'Produto salvo com sucesso'
+              "Produto salvo com sucesso"
             );
 
             if (!isNaN(this.produto.id)) {
-              console.log('if');
-              this.router.navigate(['novo'], {
+              console.log("if");
+              this.router.navigate(["novo"], {
                 relativeTo: this.activatedRoute.parent,
               });
             } else {
               this.form.reset({
-                origem: 'NACIONAL',
+                origem: "NACIONAL",
                 status: false,
                 categoria: new Categoria(),
               });
@@ -142,12 +142,12 @@ export class ProdutoCadastroComponent implements OnInit, OnDestroy {
           (error) => {
             console.error(error);
             this.snackBarMessageService.openSnackbar(
-              'Aconteceu um erro ao salvar o produto'
+              "Aconteceu um erro ao salvar o produto"
             );
           }
         );
     } else {
-      this.snackBarMessageService.openSnackbar('Formulario nao valido');
+      this.snackBarMessageService.openSnackbar("Formulario nao valido");
     }
   }
   MostrarMsgErroControl(control: string) {
@@ -156,7 +156,7 @@ export class ProdutoCadastroComponent implements OnInit, OnDestroy {
 
   onCadastroRapido(): void {
     const dialogRefRapido = this.dialog.open(CadastroRapidoComponent, {
-      width: '250px',
+      width: "250px",
       data: {},
     });
 
@@ -167,7 +167,6 @@ export class ProdutoCadastroComponent implements OnInit, OnDestroy {
         switchMap((value) => {
           // if (dialogRefRapido.componentInstance.data.status) {
           if (value.nome) {
-            console.log(value);
             return this.categoriaService.salvar(value);
           } else {
             return EMPTY;
@@ -177,7 +176,7 @@ export class ProdutoCadastroComponent implements OnInit, OnDestroy {
       .subscribe((result) => {
         if (result) {
           this.snackBarMessageService.openSnackbar(
-            'Cadastro rápido feito com sucesso'
+            "Cadastro rápido feito com sucesso"
           );
           this.carregarCategorias();
         }
@@ -185,15 +184,15 @@ export class ProdutoCadastroComponent implements OnInit, OnDestroy {
   }
 
   excluir() {
-    console.log('excluir');
+    console.log("excluir");
     const dialogExcluir = this.dialog.open(ConfirmModalComponent, {
-      width: '250px',
+      width: "250px",
       data: {
-        titulo: 'Apagar ' + this.form.value.nome,
+        titulo: "Apagar " + this.form.value.nome,
         mensagem:
-          'Tem certeza que deseja apagar? Esta ação não poderá ser desfeita',
-        msgCancel: 'Cancelar',
-        msgConfirm: 'Confirmar',
+          "Tem certeza que deseja apagar? Esta ação não poderá ser desfeita",
+        msgCancel: "Cancelar",
+        msgConfirm: "Confirmar",
       },
     });
 
@@ -205,11 +204,11 @@ export class ProdutoCadastroComponent implements OnInit, OnDestroy {
       )
       .subscribe(
         (success) => {
-          console.log('sucesso');
+          console.log("sucesso");
           this.snackBarMessageService.openSnackbar(
-            'Produto excluido com sucesso'
+            "Produto excluido com sucesso"
           );
-          this.router.navigate(['novo'], {
+          this.router.navigate(["novo"], {
             relativeTo: this.activatedRoute.parent,
           });
         },
@@ -234,9 +233,8 @@ export class ProdutoCadastroComponent implements OnInit, OnDestroy {
   }
 
   upload() {
-    console.log('upload');
+    console.log("upload");
     if (this.produto.nomeArquivo) {
-      console.log('upload if');
       this.arquivoService.delete(this.produto.nomeArquivo).subscribe();
       this.form.patchValue({
         nomeArquivo: null,
@@ -254,15 +252,15 @@ export class ProdutoCadastroComponent implements OnInit, OnDestroy {
         )
         .subscribe((event: HttpEvent<any>) => {
           if (event.type === HttpEventType.Response) {
-            console.log('event', event.body.nome);
-            console.log('Upload Concluído');
+            console.log("event", event.body.nome);
+            console.log("Upload Concluído");
             // console.log('Upload Concluído',event.nome);
             this.form.patchValue({
               nomeArquivo: event.body.nome,
             });
           } else if (event.type === HttpEventType.UploadProgress) {
             const percentDone = Math.round((event.loaded * 100) / event.total);
-            console.log('Progresso', percentDone);
+            console.log("Progresso", percentDone);
           }
         });
     }

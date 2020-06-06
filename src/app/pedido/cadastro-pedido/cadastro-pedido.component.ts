@@ -1,13 +1,5 @@
-import { MatSort } from '@angular/material/sort';
-import { SnackBarMessageService } from './../../shared/snack-bar-message.service';
-import { ErrorHandlerService } from './../../seguranca/error-handler.service';
-
-import { ActivatedRoute } from '@angular/router';
-import { PedidoService } from './../service/pedido.service';
-import { MatTable } from '@angular/material/table';
-import { ItemPedido } from './../model/item-pedido';
-import { ArquivoService } from './../../shared/arquivo.service';
-import { ProdutoService } from './../../produto/service/produto.service';
+import { MatTable } from "@angular/material/table";
+import { ItemPedido } from "./../model/item-pedido";
 import {
   filter,
   debounceTime,
@@ -15,24 +7,30 @@ import {
   switchMap,
   takeUntil,
   catchError,
-} from 'rxjs/operators';
+} from "rxjs/operators";
 import {
-  FormGroup,
-  FormBuilder,
   FormControl,
   Validators,
+  FormGroup,
+  FormBuilder,
   FormArray,
-} from '@angular/forms';
-import { Produto } from './../../produto/model/Produto';
-import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
-import { Observable, Subject, empty, EMPTY } from 'rxjs';
-import { Pedido } from '../model/pedido';
-import { StatusPedido } from '../model/status-pedido.enum';
+} from "@angular/forms";
+import { Component, OnInit, ViewChild, OnDestroy } from "@angular/core";
+import { Subject, EMPTY, Observable } from "rxjs";
+import { Pedido } from "../model/pedido";
+import { StatusPedido } from "../model/status-pedido.enum";
+import { Produto } from "src/app/produto/model/Produto";
+import { ProdutoService } from "src/app/produto/service/produto.service";
+import { ArquivoService } from "src/app/shared/arquivo.service";
+import { ActivatedRoute } from "@angular/router";
+import { ErrorHandlerService } from "src/app/shared/error-handler.service";
+import { SnackBarMessageService } from "src/app/shared/snack-bar-message.service";
+import { PedidoService } from "../service/pedido.service";
 
 @Component({
-  selector: 'app-cadastro-pedido',
-  templateUrl: './cadastro-pedido.component.html',
-  styleUrls: ['./cadastro-pedido.component.scss'],
+  selector: "app-cadastro-pedido",
+  templateUrl: "./cadastro-pedido.component.html",
+  styleUrls: ["./cadastro-pedido.component.scss"],
 })
 export class CadastroPedidoComponent implements OnInit, OnDestroy {
   unsubscribe$ = new Subject();
@@ -42,15 +40,15 @@ export class CadastroPedidoComponent implements OnInit, OnDestroy {
   produtos: Produto[];
   produtosFiltrados$: Observable<Produto[]>;
   displayedColumns: string[] = [
-    'codigo',
-    'produto',
-    'quantidade',
-    'valorUnitario',
-    'subtotal',
-    'opcoes',
+    "codigo",
+    "produto",
+    "quantidade",
+    "valorUnitario",
+    "subtotal",
+    "opcoes",
   ];
 
-  @ViewChild(MatTable, { static: true }) table: MatTable<any>;
+  @ViewChild(MatTable, { static: true }) table: MatTable<ItemPedido>;
   constructor(
     private fb: FormBuilder,
     private produtoService: ProdutoService,
@@ -98,7 +96,7 @@ export class CadastroPedidoComponent implements OnInit, OnDestroy {
         if (this.form.controls.itens.value === null) {
           this.form.controls.itens.setValue([]);
         }
-      }),*/
+      }), */
       catchError((err) => {
         this.errorHandlerService.handle(err);
         return EMPTY;
@@ -106,18 +104,18 @@ export class CadastroPedidoComponent implements OnInit, OnDestroy {
     );
   }
 
-  produtoSelecionado(produto) {
+  produtoSelecionado(produto: Produto) {
     const itemPedido = new ItemPedido();
     itemPedido.produto = produto;
     itemPedido.quantidade = 1;
     itemPedido.valorUnitario = produto.preco;
-    const formArrayItens: FormArray = this.form.get('itens') as FormArray;
+    const formArrayItens: FormArray = this.form.get("itens") as FormArray;
     formArrayItens.push(new FormControl(itemPedido));
 
     // this.form.controls.itens.value.push(itemPedido);
     this.table.renderRows();
 
-    this.produtoAutoComplete.patchValue('');
+    this.produtoAutoComplete.patchValue("");
     this.calcularTotal(formArrayItens);
   }
 
@@ -126,7 +124,7 @@ export class CadastroPedidoComponent implements OnInit, OnDestroy {
   }
 
   updateTable(event, rowObj) {
-    const formArrayItens: FormArray = this.form.get('itens') as FormArray;
+    const formArrayItens: FormArray = this.form.get("itens") as FormArray;
     formArrayItens.controls.forEach((i) => {
       if (i.value.produto.id === rowObj.produto.id) {
         i.value.quantidade = event.target.value;
@@ -140,12 +138,12 @@ export class CadastroPedidoComponent implements OnInit, OnDestroy {
         value.quantidade = event.target.value;
       }
       return true;
-    });*/
+    }); */
     this.calcularTotal(formArrayItens);
   }
 
   deleteRowTable(rowObj: FormControl) {
-    const formArrayItens: FormArray = this.form.get('itens') as FormArray;
+    const formArrayItens: FormArray = this.form.get("itens") as FormArray;
 
     const index = formArrayItens.controls.findIndex((i) => i.value === rowObj);
     // const index = this.form.controls.itens.value.indexOf(row_obj);
@@ -159,7 +157,7 @@ export class CadastroPedidoComponent implements OnInit, OnDestroy {
 
   calcularTotal(formArrayItens?: FormArray) {
     if (!formArrayItens) {
-      formArrayItens = this.form.get('itens') as FormArray;
+      formArrayItens = this.form.get("itens") as FormArray;
     }
 
     let total = 0;
@@ -175,7 +173,7 @@ export class CadastroPedidoComponent implements OnInit, OnDestroy {
   }
 
   evento(event) {
-    console.log('evento selecionado', event);
+    console.log("evento selecionado", event);
   }
 
   onSubmit() {
@@ -184,28 +182,21 @@ export class CadastroPedidoComponent implements OnInit, OnDestroy {
       /*
       if (!pedido.dataCriacao) {
         pedido.dataCriacao = new Date();
-      }*/
+      } */
 
-      this.pedidoService
-        .salvar(pedido)
-        .subscribe(
-          (response: Pedido) => {
-            if (!this.form.controls.dataCriacao.value) {
-              console.log('if salvar');
-              this.form.controls.dataCriacao.patchValue(
-                response.dataCriacao
-              );
-            }
-            this.snackBarMessageService.openSnackbar(
-              'Pedido salvo com sucesso!'
-            );
-            console.log('Sucesso pedido', response);
-          },
-          (err) => {
-            this.errorHandlerService.handle(err);
-            console.error('Erro pedido', err);
+      this.pedidoService.salvar(pedido).subscribe(
+        (response: Pedido) => {
+          if (!this.form.controls.dataCriacao.value) {
+            this.form.controls.dataCriacao.patchValue(response.dataCriacao);
           }
-        );
+          this.snackBarMessageService.openSnackbar("Pedido salvo com sucesso!");
+          console.log("Sucesso pedido", response);
+        },
+        (err) => {
+          this.errorHandlerService.handle(err);
+          console.error("Erro pedido", err);
+        }
+      );
     }
   }
 
@@ -215,9 +206,9 @@ export class CadastroPedidoComponent implements OnInit, OnDestroy {
       .subscribe((response) => {
         this.form.controls.statusPedido.setValue(StatusPedido.CONCLUIDO);
         this.snackBarMessageService.openSnackbar(
-          'Pedido concluido com sucesso!'
+          "Pedido concluido com sucesso!"
         );
-        console.log('Pedido Concluido', response);
+        console.log("Pedido Concluido", response);
       });
   }
 
@@ -227,9 +218,9 @@ export class CadastroPedidoComponent implements OnInit, OnDestroy {
       .subscribe((response) => {
         this.form.controls.statusPedido.setValue(StatusPedido.CANCELADO);
         this.snackBarMessageService.openSnackbar(
-          'Pedido cancelado com sucesso!'
+          "Pedido cancelado com sucesso!"
         );
-        console.log('Pedido Cancelado', response);
+        console.log("Pedido Cancelado", response);
       });
   }
 
