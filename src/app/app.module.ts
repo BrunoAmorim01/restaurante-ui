@@ -19,20 +19,20 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { LayoutModule } from '@angular/cdk/layout';
-import { DashboardModule } from './dashboard/dashboard.module';
+
 
 //export const options: Partial<IConfig> | (() => Partial<IConfig>);
 registerLocaleData(localeBr,'pt',localeBrExtra)
 @NgModule({
   declarations: [
-    AppComponent,
-    DashboardComponent        
+    AppComponent
+            
   ],
   imports: [
     SegurancaModule ,
     BrowserModule,
     BrowserAnimationsModule,
-    TemplateModule,
+    TemplateModule,    
     SharedModule,    
     AppRoutingModule ,
     OAuthModule.forRoot({
@@ -40,13 +40,8 @@ registerLocaleData(localeBr,'pt',localeBrExtra)
         allowedUrls:['http://localhost:8080/'],
         sendAccessToken:true        
       }
-    }),
-    MatGridListModule,
-    MatCardModule,
-    MatMenuModule,
-    MatIconModule,
-    MatButtonModule,
-    LayoutModule
+    })
+    
     //DashboardModule
     //HttpClientModule
     

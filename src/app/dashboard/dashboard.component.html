@@ -17,7 +17,10 @@
         </mat-card-header>
         <mat-card-content class="dashboard-card-content">
           <div *ngIf="card.tipo==='dinheiro'">{{card.data | currency}}</div>
-          <div *ngIf="card.tipo==='grafico'">{{card.data}}</div>
+          
+          <div *ngIf="card.tipo==='grafico'">           
+            <app-bar-chart [data]="card.data"></app-bar-chart>
+          </div>
         </mat-card-content>
       </mat-card>
     </mat-grid-tile>

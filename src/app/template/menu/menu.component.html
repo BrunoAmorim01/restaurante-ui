@@ -15,8 +15,9 @@
     <mat-sidenav #drawer [fixedInViewport]="(isHandset$ | async)" [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
       [mode]="(isHandset$ | async) ? 'over' : 'side'" [opened]="(isHandset$ | async) === false"
       fixedTopGap="56">
-
+      
       <mat-accordion>
+        <a mat-button [routerLink]="['/dashboard']">Link</a>        
         <mat-expansion-panel>
           <mat-expansion-panel-header>
             Produto

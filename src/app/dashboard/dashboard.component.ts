@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ViewChild } from "@angular/core";
 import {
   map,
   delay,
@@ -12,6 +12,7 @@ import { Breakpoints, BreakpointObserver } from "@angular/cdk/layout";
 import { DashboardService } from "./service/dashboard.service";
 import { Dashboard } from "./model/dashboard";
 import { concat, Observable } from "rxjs";
+import { BarChartComponent } from './bar-chart/bar-chart.component';
 
 @Component({
   selector: "app-dashboard",
@@ -24,10 +25,11 @@ export class DashboardComponent implements OnInit {
   cards;
   media$: Observable<any>;
 
+  @ViewChild(BarChartComponent) barChart: BarChartComponent
   constructor(
     private breakpointObserver: BreakpointObserver,
-    dashboardService: DashboardService
-  ) {
+    dashboardService: DashboardService        
+  ) {    
     this.cards = dashboardService.getMediaValorTotalPedidos().pipe(
       tap((value) => {
         this.dashboard.mediaValorTotalPedidos = value;
@@ -52,21 +54,21 @@ export class DashboardComponent implements OnInit {
         if (matches) {
           return [
             {
-              title: "Media Valor total mes atual",
+              title: "Media Valor total mês atual",
               cols: 1,
               rows: 1,
               tipo: "dinheiro",
               data: this.dashboard.mediaValorTotalPedidos,
             },
             {
-              title: "Ranking produtos",
+              title: "Ranking produtos mês atual",
               cols: 1,
               rows: 1,
               tipo: "grafico",
-              data: JSON.stringify(this.dashboard.rankingProdutos),
+              data: this.dashboard.rankingProdutos,
             },
             {
-              title: "Valor total dos pedidos",
+              title: "Valor total dos pedidos mês atual",
               cols: 1,
               rows: 1,
               tipo: "dinheiro",
@@ -78,21 +80,24 @@ export class DashboardComponent implements OnInit {
 
         return [
           {
-            title: "Card 1",
+            title: "Media Valor total mês atual",
             cols: 2,
             rows: 1,
+            tipo: "dinheiro",
             data: this.dashboard.mediaValorTotalPedidos,
           },
           {
-            title: "Ranking produtos",
+            title: "Ranking produtos mês atual",
             cols: 1,
             rows: 1,
+            tipo: "grafico",
             data: this.dashboard.rankingProdutos,
           },
           {
-            title: "Valor total dos pedidos",
+            title: "Valor total dos pedidos mês atual",
             cols: 1,
             rows: 2,
+            tipo: "dinheiro",
             data: this.dashboard.valorTotalPedidos,
           },
           { title: "Card 4", cols: 1, rows: 1 },
