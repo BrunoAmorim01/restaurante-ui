@@ -1,8 +1,6 @@
 import { Oauth2Guard } from "./seguranca/guards/oauth2.guard";
 import { NgModule } from "@angular/core";
 import { Routes, RouterModule } from "@angular/router";
-import { LoginFormComponent } from "./seguranca/login-form/login-form.component";
-import { AuthGuard } from "./seguranca/guards/auth.guard";
 
 const routes: Routes = [
   {
@@ -43,6 +41,11 @@ const routes: Routes = [
     path: "dashboard",
     loadChildren: () =>
       import("./dashboard/dashboard.module").then((m) => m.DashboardModule),
+  },
+  {
+    path: "relatorios",
+    loadChildren: () =>
+      import("./relatorio/relatorio.module").then((m) => m.RelatorioModule),
   },
 ];
 

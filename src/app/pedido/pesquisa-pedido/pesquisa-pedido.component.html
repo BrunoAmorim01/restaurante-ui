@@ -4,7 +4,6 @@
       <mat-card-title>Pesquisa de pedidos</mat-card-title>
     </mat-card-header>
     <mat-card-content>
-      
       <div class="row">
         <div class="col">
           <mat-form-field class="full-width">
@@ -12,7 +11,7 @@
             <input
               matInput
               [matDatepicker]="inicio"
-              formControlName="dataInicio"
+              formControlName="dataInicio" mask="99/99/9999"
             />
             <mat-datepicker-toggle
               matSuffix
@@ -35,7 +34,7 @@
         </div>
       </div>
 
-      <section class="section-form ">
+      <section class="section-form">
         <mat-label>Status</mat-label>
         <div *ngFor="let status of statusPedido">
           <mat-checkbox

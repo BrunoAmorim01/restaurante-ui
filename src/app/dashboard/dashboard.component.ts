@@ -42,7 +42,8 @@ export class DashboardComponent implements OnInit {
       tap((value) => {
         this.dashboard.valorTotalPedidos = value;
       }),
-      switchMap(() => cards$)
+      switchMap(() => cards$),
+      delay(500)
     );
     /*
       .subscribe((data) => {
