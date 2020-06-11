@@ -12,7 +12,7 @@ import { Breakpoints, BreakpointObserver } from "@angular/cdk/layout";
 import { DashboardService } from "./service/dashboard.service";
 import { Dashboard } from "./model/dashboard";
 import { concat, Observable } from "rxjs";
-import { BarChartComponent } from './bar-chart/bar-chart.component';
+import { BarChartComponent } from "./bar-chart/bar-chart.component";
 
 @Component({
   selector: "app-dashboard",
@@ -25,25 +25,25 @@ export class DashboardComponent implements OnInit {
   cards;
   media$: Observable<any>;
 
-  @ViewChild(BarChartComponent) barChart: BarChartComponent
   constructor(
     private breakpointObserver: BreakpointObserver,
-    dashboardService: DashboardService        
-  ) {    
-    this.cards = dashboardService.getMediaValorTotalPedidos().pipe(
+    private dashboardService: DashboardService
+  ) {}
+
+  ngOnInit(): void {
+    this.cards = this.dashboardService.getMediaValorTotalPedidos().pipe(
       tap((value) => {
         this.dashboard.mediaValorTotalPedidos = value;
       }),
-      switchMap(() => dashboardService.getRankingProdutos()),
+      switchMap(() => this.dashboardService.getRankingProdutos()),
       tap((value: Object[]) => {
         this.dashboard.rankingProdutos = value;
       }),
-      switchMap(() => dashboardService.getValorTotalPedidos()),
+      switchMap(() => this.dashboardService.getValorTotalPedidos()),
       tap((value) => {
         this.dashboard.valorTotalPedidos = value;
       }),
-      switchMap(() => cards$),
-      delay(500)
+      switchMap(() => cards$)
     );
     /*
       .subscribe((data) => {
@@ -56,21 +56,21 @@ export class DashboardComponent implements OnInit {
           return [
             {
               title: "Media Valor total mês atual",
-              cols: 1,
+              cols: 2,
               rows: 1,
               tipo: "dinheiro",
               data: this.dashboard.mediaValorTotalPedidos,
             },
             {
               title: "Ranking produtos mês atual",
-              cols: 1,
+              cols: 2,
               rows: 1,
               tipo: "grafico",
               data: this.dashboard.rankingProdutos,
             },
             {
               title: "Valor total dos pedidos mês atual",
-              cols: 1,
+              cols: 2,
               rows: 1,
               tipo: "dinheiro",
               data: this.dashboard.valorTotalPedidos,
@@ -78,21 +78,20 @@ export class DashboardComponent implements OnInit {
             { title: "Card 4", cols: 1, rows: 1 },
           ];
         }
-
         return [
           {
-            title: "Media Valor total mês atual",
-            cols: 2,
-            rows: 1,
-            tipo: "dinheiro",
-            data: this.dashboard.mediaValorTotalPedidos,
-          },
-          {
             title: "Ranking produtos mês atual",
-            cols: 1,
+            cols: 2,
             rows: 1,
             tipo: "grafico",
             data: this.dashboard.rankingProdutos,
+          },
+          {
+            title: "Media Valor total mês atual",
+            cols: 1,
+            rows: 1,
+            tipo: "dinheiro",
+            data: this.dashboard.mediaValorTotalPedidos,
           },
           {
             title: "Valor total dos pedidos mês atual",
@@ -105,10 +104,5 @@ export class DashboardComponent implements OnInit {
         ];
       })
     );
-  }
-
-  ngOnInit(): void {
-    console.log("init");
-    console.log("model3", this.dashboard.mediaValorTotalPedidos);
   }
 }

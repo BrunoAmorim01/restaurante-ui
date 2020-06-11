@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { environment } from "src/environments/environment";
-import { take } from "rxjs/operators";
+import { take, delay } from "rxjs/operators";
 
 @Injectable({
   providedIn: "root",
@@ -15,7 +15,7 @@ export class DashboardService {
   getMediaValorTotalPedidos() {
     return this.http
       .get<Number>(this.API_URL + "/venda-media-mes-atual")
-      .pipe(take(1));
+      .pipe(take(1), delay(1000));
   }
 
   getRankingProdutos() {

@@ -17,10 +17,20 @@
       fixedTopGap="56">
       
       <mat-accordion>
-        <a mat-button [routerLink]="['/dashboard']">Link</a>        
+        <a mat-button [routerLink]="['/dashboard']">Dashboard</a>
+        
         <mat-expansion-panel>
           <mat-expansion-panel-header>
-            Produto
+            Clientes
+          </mat-expansion-panel-header>
+          <mat-nav-list>
+            <a mat-list-item [routerLink]="['/cliente/novo']" routerLinkActive>Cadastro</a>            
+          </mat-nav-list>
+        </mat-expansion-panel>
+        
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            Produtos
           </mat-expansion-panel-header>
           <mat-nav-list>
             <a mat-list-item [routerLink]="['/produto/novo']" routerLinkActive>Cadastro</a>

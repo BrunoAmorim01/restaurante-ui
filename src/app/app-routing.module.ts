@@ -15,6 +15,14 @@ const routes: Routes = [
     loadChildren: () =>
       import("./seguranca/seguranca.module").then((m) => m.SegurancaModule),
   },
+
+  {
+    path: "cliente",
+    canActivate: [Oauth2Guard],
+    loadChildren: () =>
+      import("./cliente/cliente.module").then((m) => m.ClienteModule),
+  },
+
   {
     path: "produto",
     canActivate: [Oauth2Guard],
@@ -34,16 +42,19 @@ const routes: Routes = [
   },*/
   {
     path: "logout",
+    canActivate: [Oauth2Guard],
     loadChildren: () =>
       import("./seguranca/seguranca.module").then((m) => m.SegurancaModule),
   },
   {
     path: "dashboard",
+    //canActivate: [Oauth2Guard],
     loadChildren: () =>
       import("./dashboard/dashboard.module").then((m) => m.DashboardModule),
   },
   {
     path: "relatorios",
+    canActivate: [Oauth2Guard],
     loadChildren: () =>
       import("./relatorio/relatorio.module").then((m) => m.RelatorioModule),
   },

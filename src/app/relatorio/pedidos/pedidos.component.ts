@@ -1,5 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import { FormGroup, FormBuilder } from "@angular/forms";
+import { FormGroup, FormBuilder, Validators } from "@angular/forms";
 import { RelatorioService } from "../relatorio.service";
 import { ErrorHandlerService } from "src/app/seguranca/error-handler.service";
 import { catchError, take } from "rxjs/operators";
@@ -22,14 +22,18 @@ export class PedidosComponent implements OnInit {
 
   ngOnInit(): void {
     this.form = this.fb.group({
-      dataInicio: [null],
-      dataFim: [null],
+      dataInicio: [null,Validators.required],
+      dataFim: [null, Validators.required],
     });
   }
 
   onSubmit() {
+    if(this.form.valid)    
     this.relatorioService
-      .pedidosPorData()
+      .pedidosPorData(
+        this.form.controls.dataInicio.value,
+        this.form.controls.dataFim.value
+      )
       .pipe(
         pipe(take(1)),
         catchError((err) => {
@@ -37,8 +41,8 @@ export class PedidosComponent implements OnInit {
           return EMPTY;
         })
       )
-      .subscribe((res) => {        
-        this.arquivoService.handleFile(res, "report.pdf");
+      .subscribe((res) => {
+        this.arquivoService.handleFile(res, "relatorio.pdf");
       });
   }
 }

@@ -1,0 +1,104 @@
+<form [formGroup]="form" novalidate (ngSubmit)="onSubmit()">
+  <mat-card class="container-card">
+    <mat-card-header>
+      <mat-card-title>Cadastro de cliente</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="row">
+        <mat-form-field class="full-width">
+          <input matInput placeholder="Nome" formControlName="nome" />
+          <mat-error *ngIf="form.controls['nome'].hasError('required')">
+            Nome é <strong>obrigatório</strong>
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="row">
+        <div class="col">
+          <label>Tipo</label>
+          <br />
+          <mat-radio-group formControlName="tipoPessoa">
+            <mat-radio-button
+              *ngFor="let tipo of tipoPessoaValues"
+              [value]="tipo"
+            >
+              {{ tipo }}
+            </mat-radio-button>
+          </mat-radio-group>
+        </div>
+
+        <div class="col">
+          <mat-form-field class="full-width">
+            <input
+              matInput
+              placeholder="Identificacao"
+              formControlName="identificacao"
+            />
+            <mat-error
+              *ngIf="form.controls['identificacao'].hasError('required')"
+            >
+              Identificacao é <strong>obrigatório</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col">
+          <mat-form-field class="full-width">
+            <input type="email" matInput placeholder="E-mail" formControlName="email" />
+            <mat-error *ngIf="form.controls['email'].hasError('required')">
+              E-mail é <strong>obrigatório</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="col">
+          <mat-form-field class="full-width">
+            <input matInput placeholder="Telefone" formControlName="telefone" />
+            <mat-error *ngIf="form.controls['telefone'].hasError('required')">
+              Telefone é <strong>obrigatório</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col">
+          <mat-form-field class="full-width">
+            <input matInput placeholder="CEP" formControlName="cep" />            
+          </mat-form-field>
+        </div>
+        <div class="col">
+          <mat-form-field class="full-width">
+            <input matInput placeholder="Estado" formControlName="estado" />            
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col">
+          <mat-form-field class="full-width">
+            <input matInput placeholder="Cidade" formControlName="cidade" />            
+          </mat-form-field>
+        </div>
+        <div class="col">
+          <mat-form-field class="full-width">
+            <input matInput placeholder="Logradouro" formControlName="logradouro" />            
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col">
+          <mat-form-field class="full-width">
+            <input matInput placeholder="Numero" formControlName="numero" />            
+          </mat-form-field>
+        </div>
+      </div>
+    </mat-card-content>
+    <mat-card-actions>
+      <button mat-raised-button color="primary" type="submit">Submit</button>
+    </mat-card-actions>
+  </mat-card>
+</form>
