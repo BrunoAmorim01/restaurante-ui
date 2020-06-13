@@ -11,7 +11,12 @@ import {
   tap,
 } from "rxjs/operators";
 import { EnderecoService } from "../service/endereco.service";
-import { Bairro } from '../model/bairro';
+import { Bairro } from "../model/bairro";
+import { EstadoService } from "../service/estado.service";
+import { Estado } from "../model/estado";
+import { CidadeService } from "../service/cidade.service";
+import { Cidade } from "../model/cidade";
+import { BairroService } from "../service/bairro.service";
 
 @Component({
   selector: "app-cadastro-cliente",
@@ -22,13 +27,21 @@ export class CadastroClienteComponent implements OnInit, OnDestroy {
   private unsubscribe$ = new Subject<void>();
   form: FormGroup;
   tipoPessoaValues = Object.keys(TipoPessoa).filter(String);
+  estados$;
+  cidades$;
+  bairros$;
 
   constructor(
     private fb: FormBuilder,
-    private enderecoService: EnderecoService
+    private enderecoService: EnderecoService,
+    private estadoService: EstadoService,
+    private cidadeService: CidadeService,
+    private bairroService: BairroService
   ) {}
 
   ngOnInit(): void {
+    this.estados$ = this.estadoService.list();
+
     this.form = this.fb.group({
       nome: [null, Validators.required],
       tipoPessoa: [null, Validators.required],
@@ -54,13 +67,24 @@ export class CadastroClienteComponent implements OnInit, OnDestroy {
       )
       .subscribe((response: any) => {
         console.log("response cep", response);
-        this.form.controls["bairro"].setValue(new Bairro().nome= response.bairro);
+        /*
+        this.form.controls["bairro"].setValue(
+          (new Bairro().nome = response.bairro)
+        );*/
         this.form.controls["logradouro"].setValue(response.logradouro);
       });
   }
 
   onSubmit() {
     console.log("form values", this.form.value);
+  }
+
+  listarCidades(estado: Estado) {
+    this.cidades$ = this.cidadeService.listarCidadesPorEstado(estado.id);
+  }
+
+  listarBairros(cidade: Cidade) {
+    this.bairros$ = this.bairroService.listarBairrosPorCidadeId(cidade.id);
   }
 
   ngOnDestroy(): void {

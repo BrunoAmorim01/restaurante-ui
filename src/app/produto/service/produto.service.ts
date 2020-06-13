@@ -16,10 +16,9 @@ import { ProdutoFilter } from "../produto-pesquisa/produto-pesquisa.component";
 export class ProdutoService extends CrudService<Produto> {
   constructor(
     protected http: HttpClient,
-    protected auth: AuthServiceTest,
     protected oauthService: OAuthService
   ) {
-    super(http, `${environment.API}/produtos`, auth, oauthService);
+    super(http, `${environment.API}/produtos`, oauthService);
   }
 
   listFilter(filtro: ProdutoFilter) {
@@ -39,7 +38,7 @@ export class ProdutoService extends CrudService<Produto> {
 
     return this.http
       .get<any>(`${environment.API}/produtos`, {
-        params        
+        params,
       })
       .pipe(take(1));
 

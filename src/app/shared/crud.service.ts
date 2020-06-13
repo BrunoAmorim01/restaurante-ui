@@ -7,9 +7,9 @@ import { AuthServiceTest } from '../seguranca/auth.service-test';
 export class CrudService<T> {
   constructor(
     protected http: HttpClient,
-    private API_URL: string,
-    protected auth: AuthServiceTest,
-    protected oauthService: OAuthService
+    protected API_URL: string,
+    protected oauthService: OAuthService,
+    protected auth?: AuthServiceTest
   ) {}
 
   list() {

@@ -16,10 +16,9 @@ import { OAuthService } from "angular-oauth2-oidc";
 export class PedidoService extends CrudService<Pedido> {
   constructor(
     protected http: HttpClient,
-    protected auth: AuthServiceTest,
     protected oauthService: OAuthService
   ) {
-    super(http, `${environment.API}/pedidos`, auth, oauthService);
+    super(http, `${environment.API}/pedidos`, oauthService);
   }
 
   listFilter(filter: PedidoFilter) {
@@ -46,8 +45,8 @@ export class PedidoService extends CrudService<Pedido> {
       );
     }
 
-    if(filter.statusPedido){
-      params = params.append('statusPedido', filter.statusPedido.toString())
+    if (filter.statusPedido) {
+      params = params.append("statusPedido", filter.statusPedido.toString());
     }
 
     /*
@@ -80,6 +79,5 @@ export class PedidoService extends CrudService<Pedido> {
         params,
       })
       .pipe(take(1));
-      
   }
 }
