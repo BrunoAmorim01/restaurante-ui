@@ -1,7 +1,12 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
-import { FormBuilder, Validators, FormGroup } from "@angular/forms";
+import {
+  FormBuilder,
+  Validators,
+  FormGroup,
+  FormControl,
+} from "@angular/forms";
 import { TipoPessoa } from "../model/tipo-pessoa";
-import { Subject } from "rxjs";
+import { Subject, EMPTY } from "rxjs";
 import {
   filter,
   debounceTime,
@@ -9,6 +14,7 @@ import {
   switchMap,
   takeUntil,
   tap,
+  catchError,
 } from "rxjs/operators";
 import { EnderecoService } from "../service/endereco.service";
 import { Bairro } from "../model/bairro";
@@ -17,6 +23,9 @@ import { Estado } from "../model/estado";
 import { CidadeService } from "../service/cidade.service";
 import { Cidade } from "../model/cidade";
 import { BairroService } from "../service/bairro.service";
+import { ClienteService } from "../service/cliente.service";
+import { ErrorHandlerService } from "src/app/seguranca/error-handler.service";
+import { SnackBarMessageService } from "src/app/shared/snack-bar-message.service";
 
 @Component({
   selector: "app-cadastro-cliente",
@@ -26,6 +35,8 @@ import { BairroService } from "../service/bairro.service";
 export class CadastroClienteComponent implements OnInit, OnDestroy {
   private unsubscribe$ = new Subject<void>();
   form: FormGroup;
+  formControlEstado: FormControl;
+  formControlCidade: FormControl;
   tipoPessoaValues = Object.keys(TipoPessoa).filter(String);
   estados$;
   cidades$;
@@ -36,7 +47,10 @@ export class CadastroClienteComponent implements OnInit, OnDestroy {
     private enderecoService: EnderecoService,
     private estadoService: EstadoService,
     private cidadeService: CidadeService,
-    private bairroService: BairroService
+    private bairroService: BairroService,
+    private clienteService: ClienteService,
+    private errorHandlerService: ErrorHandlerService,
+    private snackBarMessageService: SnackBarMessageService
   ) {}
 
   ngOnInit(): void {
@@ -44,16 +58,16 @@ export class CadastroClienteComponent implements OnInit, OnDestroy {
 
     this.form = this.fb.group({
       nome: [null, Validators.required],
-      tipoPessoa: [null, Validators.required],
-      identificacao: [null],
+      tipoCliente: [null, Validators.required],
+      cpfCnpj: [null],
       telefone: [null],
       email: [null],
       cep: [null],
-      estado: [null],
-      cidade: [null],
       bairro: [null],
       logradouro: [null],
+      complemento: [null],
       numero: [null],
+      ativo: [null],
     });
 
     this.form.controls["cep"].valueChanges
@@ -72,11 +86,25 @@ export class CadastroClienteComponent implements OnInit, OnDestroy {
           (new Bairro().nome = response.bairro)
         );*/
         this.form.controls["logradouro"].setValue(response.logradouro);
+        this.form.controls["complemento"].setValue(response.complemento);
       });
   }
 
   onSubmit() {
     console.log("form values", this.form.value);
+    if (this.form.valid) {
+      this.clienteService
+        .salvar(this.form.value)
+        .pipe(
+          catchError((err) => {
+            this.errorHandlerService.handle(err);
+            return EMPTY;
+          })
+        )
+        .subscribe((Response) => {
+          this.snackBarMessageService.openSnackbar("Cliente salvo com sucesso!");
+        });
+    }
   }
 
   listarCidades(estado: Estado) {
