@@ -62,16 +62,19 @@ export class CadastroClienteComponent implements OnInit, OnDestroy {
       cpfCnpj: [null],
       telefone: [null],
       email: [null],
-      cep: [null],
-      bairro: [null],
-      logradouro: [null],
-      complemento: [null],
-      numero: [null],
+      endereco: this.fb.group({
+        cep: [null],
+        bairro: [null],
+        logradouro: [null],
+        complemento: [null],
+        numero: [null],
+      }),
       ativo: [null],
     });
 
-    this.form.controls["cep"].valueChanges
-      .pipe(
+    this.form
+      .get("endereco.cep")
+      .valueChanges.pipe(
         tap((v) => console.log(v)),
         filter((value) => value.length === 8),
         debounceTime(500),
@@ -85,8 +88,8 @@ export class CadastroClienteComponent implements OnInit, OnDestroy {
         this.form.controls["bairro"].setValue(
           (new Bairro().nome = response.bairro)
         );*/
-        this.form.controls["logradouro"].setValue(response.logradouro);
-        this.form.controls["complemento"].setValue(response.complemento);
+        this.form.get("endereco.logradouro").setValue(response.logradouro);
+        this.form.get("endereco.complemento").setValue(response.complemento);
       });
   }
 
@@ -102,7 +105,9 @@ export class CadastroClienteComponent implements OnInit, OnDestroy {
           })
         )
         .subscribe((Response) => {
-          this.snackBarMessageService.openSnackbar("Cliente salvo com sucesso!");
+          this.snackBarMessageService.openSnackbar(
+            "Cliente salvo com sucesso!"
+          );
         });
     }
   }
