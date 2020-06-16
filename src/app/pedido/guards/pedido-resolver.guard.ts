@@ -9,7 +9,7 @@ import {
 import { PedidoService } from "./../service/pedido.service";
 import { Injectable } from "@angular/core";
 import { catchError } from "rxjs/operators";
-import { StatusPedido } from '../model/status-pedido.enum';
+import { StatusPedido } from "../model/status-pedido.enum";
 
 @Injectable({
   providedIn: "root",

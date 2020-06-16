@@ -2,7 +2,7 @@ import { TipoPessoa } from "./tipo-pessoa";
 import { Bairro } from "./bairro";
 import { Endereco } from "./endereco";
 
-export interface Cliente {
+export class Cliente {
   id: number;
   nome: string;
   tipoCliente: string;
