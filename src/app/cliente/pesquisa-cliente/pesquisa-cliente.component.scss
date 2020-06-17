@@ -1,0 +1,66 @@
+
+.full-width {
+    width: 100%;
+  }
+  
+  .col-opcoes{
+    flex: 1;
+    margin-right: 20px;
+  }
+  
+  .row-opcoes{
+    display: flex;
+    flex-direction: row;
+  }
+  
+  .section-form {
+    display: flex;
+    align-content: center;
+    align-items: center;
+    height: 60px;
+  }
+  
+  /*
+  .row {
+    display: flex;
+    flex-direction: row;
+  }*/
+  /*
+  .col {
+    flex: 1;
+    margin-right: 20px;
+  }*/
+  
+  .col:last-child {
+    margin-right: 0;
+  }
+  .form-card {
+    min-width: 120px;
+    margin: 20px auto;
+    
+    //position: relative;
+    //min-height: 200px;
+  }
+  
+  
+  .loading-shade {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 56px;
+    right: 0;
+    background: rgba(0, 0, 0, 0.15);
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }  
+  
+  .mat-column-actions {
+    text-align: right;
+  }
+  
+  table {
+    width: 100%;
+  }
+  

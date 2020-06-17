@@ -10,12 +10,19 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatCardModule } from '@angular/material/card';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NgxMaskModule } from 'ngx-mask';
+import { PesquisaClienteComponent } from './pesquisa-cliente/pesquisa-cliente.component';
+import { MatTableModule } from '@angular/material/table';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { SharedModule } from '../shared/shared.module';
+import { MatIconModule } from '@angular/material/icon';
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 
 @NgModule({
-  declarations: [CadastroClienteComponent],
+  declarations: [CadastroClienteComponent, PesquisaClienteComponent],
   imports: [
     CommonModule,
+    SharedModule,
     ClienteRoutingModule,
     MatInputModule,
     MatButtonModule,
@@ -25,6 +32,10 @@ import { NgxMaskModule } from 'ngx-mask';
     ReactiveFormsModule,
     MatRadioModule,
     MatSelectModule,
+    MatTableModule,
+    MatIconModule,
+    MatProgressSpinnerModule,
+    MatPaginatorModule,
     NgxMaskModule.forRoot(),
   ]
 })

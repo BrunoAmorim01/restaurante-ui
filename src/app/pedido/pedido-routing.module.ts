@@ -3,7 +3,6 @@ import { PesquisaPedidoComponent } from "./pesquisa-pedido/pesquisa-pedido.compo
 import { CadastroPedidoComponent } from "./cadastro-pedido/cadastro-pedido.component";
 import { NgModule } from "@angular/core";
 import { Routes, RouterModule } from "@angular/router";
-import { Oauth2Guard } from "../seguranca/guards/oauth2.guard";
 
 const routes: Routes = [
   { path: "", component: CadastroPedidoComponent },
