@@ -47,7 +47,7 @@ export class PesquisaClienteComponent implements OnInit {
   onSubmit() {
     console.log(this.form.value)
     const nome = this.form.get("nome").value;
-    const pagina = 1;
+    const pagina = 0;
     const itensPorPagina = this.paginator.pageSize;
 
     this.clienteService

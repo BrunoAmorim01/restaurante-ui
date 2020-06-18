@@ -20,4 +20,11 @@ export class CidadeService extends CrudService<Cidade> {
     const params = new HttpParams().append("estado", idEstado);
     return this.http.get<Cidade>(`${environment.API}/cidades`, { params });
   }
+
+  listarCidadesPorEstadoENome(idEstado, nomeCidade) {
+    const params = new HttpParams()
+      .append("estado", idEstado)
+      .append("cidade", nomeCidade);
+    return this.http.get(`${environment.API}/cidades/por-nome`, { params });
+  }
 }

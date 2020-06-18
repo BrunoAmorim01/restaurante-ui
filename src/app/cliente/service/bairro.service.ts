@@ -20,4 +20,11 @@ export class BairroService extends CrudService<Bairro> {
     const params = new HttpParams().append("cidade", idCidade);
     return this.http.get<Bairro>(this.API_URL, { params });
   }
+
+  listarBairrosPorCidadeIdENome(idCidade, nomeBairro) {
+    const params = new HttpParams()
+      .append("cidade", idCidade)
+      .append("bairro", nomeBairro);
+    return this.http.get<Bairro>(this.API_URL + "/por-nome", { params });
+  }
 }

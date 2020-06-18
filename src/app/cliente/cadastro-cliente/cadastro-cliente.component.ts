@@ -89,11 +89,48 @@ export class CadastroClienteComponent implements OnInit, OnDestroy {
         takeUntil(this.unsubscribe$),
         switchMap((value) => this.enderecoService.pesquisaPorCep(value))
       )
-      .subscribe((response: any) => {
-        console.log("response cep", response);
-        this.form.get("endereco.logradouro").setValue(response.logradouro);
-        this.form.get("endereco.complemento").setValue(response.complemento);
+      .subscribe((cep: any) => {
+        console.log("response cep", cep);
+        this.updateEndereco(cep);
+        this.form.get("endereco.logradouro").setValue(cep.logradouro);
+        this.form.get("endereco.complemento").setValue(cep.complemento);
       });
+  }
+
+  updateEndereco(cep) {
+    const estado$ = this.estadoService
+      .porSigla(cep.uf)
+      .pipe(
+        catchError((err) => {
+          console.log(err);
+          return EMPTY;
+        }),
+        switchMap((value: Estado) => {
+          this.formControlEstado.patchValue(value);
+          this.cidades$ = this.cidadeService.listarCidadesPorEstado(value.id);
+          const cidade = this.cidadeService.listarCidadesPorEstadoENome(
+            value.id,
+            cep.localidade
+          );
+
+          return cidade;
+        }),
+        switchMap((value: Bairro) => {
+          this.formControlCidade.patchValue(value);
+
+          this.bairros$ = this.bairroService.listarBairrosPorCidadeId(value.id);
+
+          const bairro = this.bairroService.listarBairrosPorCidadeIdENome(
+            value.id,
+            cep.bairro
+          );
+          return bairro;
+        }),
+        tap((value) => {
+          this.form.get("endereco.bairro").patchValue(value);
+        })
+      )
+      .subscribe();
   }
 
   private initForm() {
