@@ -17,7 +17,7 @@
         <div class="col">
           <label>Tipo</label>
           <br />
-          <mat-radio-group formControlName="tipoCliente">
+          <mat-radio-group formControlName="tipoCliente" [color]="'warn'">
             <mat-radio-button
               *ngFor="let tipo of tipoPessoaValues"
               [value]="tipo"
@@ -35,8 +35,8 @@
               formControlName="cpfCnpj"
               mask="CPF_CNPJ"
             />
-            <mat-error *ngIf="form.controls['cpfCnpj'].hasError('required')">
-              Campo <strong>obrigatório</strong>
+            <mat-error *ngIf="form.controls['cpfCnpj'].errors">
+              Campo <strong>inválido</strong>
             </mat-error>
           </mat-form-field>
         </div>

@@ -98,7 +98,7 @@ export class CadastroClienteComponent implements OnInit, OnDestroy {
   }
 
   updateEndereco(cep) {
-    const estado$ = this.estadoService
+    this.estadoService
       .porSigla(cep.uf)
       .pipe(
         catchError((err) => {
@@ -107,30 +107,33 @@ export class CadastroClienteComponent implements OnInit, OnDestroy {
         }),
         switchMap((value: Estado) => {
           this.formControlEstado.patchValue(value);
-          this.cidades$ = this.cidadeService.listarCidadesPorEstado(value.id);
           const cidade = this.cidadeService.listarCidadesPorEstadoENome(
             value.id,
             cep.localidade
           );
+          //this.cidades$ = this.cidadeService.listarCidadesPorEstado(value.id);
 
           return cidade;
         }),
         switchMap((value: Bairro) => {
           this.formControlCidade.patchValue(value);
 
-          this.bairros$ = this.bairroService.listarBairrosPorCidadeId(value.id);
-
           const bairro = this.bairroService.listarBairrosPorCidadeIdENome(
             value.id,
             cep.bairro
           );
           return bairro;
-        }),
-        tap((value) => {
-          this.form.get("endereco.bairro").patchValue(value);
         })
       )
-      .subscribe();
+      .subscribe((value) => {
+        this.cidades$ = this.cidadeService.listarCidadesPorEstado(
+          this.formControlEstado.value.id
+        );
+        this.bairros$ = this.bairroService.listarBairrosPorCidadeId(
+          this.formControlCidade.value.id
+        );
+        this.form.get("endereco.bairro").patchValue(value);
+      });
   }
 
   private initForm() {
@@ -139,7 +142,7 @@ export class CadastroClienteComponent implements OnInit, OnDestroy {
       tipoCliente: [null, Validators.required],
       cpfCnpj: [null],
       telefone: [null],
-      email: [null],
+      email: [null, Validators.email],
       endereco: this.fb.group({
         cep: [null],
         bairro: [null],
@@ -147,7 +150,7 @@ export class CadastroClienteComponent implements OnInit, OnDestroy {
         complemento: [null],
         numero: [null],
       }),
-      ativo: [null],
+      ativo: [null, Validators.required],
     });
   }
 
@@ -167,6 +170,8 @@ export class CadastroClienteComponent implements OnInit, OnDestroy {
             "Cliente salvo com sucesso!"
           );
         });
+    } else {
+      this.snackBarMessageService.openSnackbar("Formulário não válido");
     }
   }
 
@@ -186,4 +191,7 @@ export class CadastroClienteComponent implements OnInit, OnDestroy {
   compareObjects(o1: any, o2: any) {
     return o1 && o2 ? o1.id === o2.id : o1 === o2;
   }
+
+  
+  
 }

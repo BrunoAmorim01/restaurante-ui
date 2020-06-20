@@ -9,50 +9,46 @@
     <mat-card-content>
       <mat-grid-list cols="3" rowHeight="3:2">
         <mat-grid-tile>
-          <div class="row" style="text-align: center;">
-            <div class="col">
-              <mat-icon>attach_money</mat-icon>
-            </div>
-            <div class="col">
-              <label>Valor total</label>
-            </div>
-            <div class="col">
-              <b> {{ form.value.total | currency }}</b>
-            </div>
-          </div>
+          <mat-icon>attach_money</mat-icon>
+          <label>Valor total: <br></label>
+          <b> {{ form.value.total | currency }}</b>
         </mat-grid-tile>
 
         <mat-grid-tile style="text-align: center;">
-          <div class="row">
-            <div class="col">
-              <mat-icon>style</mat-icon>
-            </div>
-            <div class="col">
-              <label>Status</label>
-            </div>
-            <div class="col">
-              <b>{{ form.controls.statusPedido.value }}</b>
-            </div>
-          </div>
+          <mat-icon>style</mat-icon>
+
+          <label>Status</label>
+
+          <b>{{ form.controls.statusPedido.value }}</b>
         </mat-grid-tile>
 
         <mat-grid-tile style="text-align: center;">
-          <div class="row">
-            <div class="col">
-              <mat-icon>today</mat-icon>
-            </div>
-            <div class="col">
-              <label>Data de criação</label>
-            </div>
-            <div class="col">
-              <b>{{ form.controls.dataCriacao.value | date: "medium" }}</b>
-            </div>
-          </div>
+          <mat-icon>today</mat-icon>
+
+          <label>Data de criação</label>
+
+          <b>{{ form.controls.dataCriacao.value | date: "medium" }}</b>
         </mat-grid-tile>
       </mat-grid-list>
       <mat-divider></mat-divider>
 
       <div class="row" style="margin-top: 20px;">
+        <div class="col">
+          <mat-form-field class="full-width">
+            <mat-label>Cliente</mat-label>
+            <input matInput />
+          </mat-form-field>
+        </div>
+
+        <div class="col">
+          <mat-form-field class="full-width">
+            <mat-label>Usuario</mat-label>
+            <input matInput />
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="row">
         <mat-form-field style="width: 100%;">
           <mat-label>Valor do desconto</mat-label>
           <input
