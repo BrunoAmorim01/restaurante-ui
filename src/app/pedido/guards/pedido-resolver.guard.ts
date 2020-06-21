@@ -51,6 +51,8 @@ export class PedidoResolverGuard implements Resolve<Pedido> {
         observacao: null,
         statusPedido: StatusPedido.ABERTO,
         total: 0,
+        cliente:null,
+        username:null
       });
     }
   }

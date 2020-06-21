@@ -22,6 +22,7 @@ import { CadastroPedidoComponent } from "./cadastro-pedido/cadastro-pedido.compo
 import { PesquisaPedidoComponent } from "./pesquisa-pedido/pesquisa-pedido.component";
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSortModule } from '@angular/material/sort';
+import { NgxMaskModule } from 'ngx-mask';
 
 @NgModule({
   declarations: [CadastroPedidoComponent, PesquisaPedidoComponent],
@@ -46,7 +47,9 @@ import { MatSortModule } from '@angular/material/sort';
     MatProgressSpinnerModule,
     ReactiveFormsModule,
     NgxCurrencyModule,
-    MatSortModule
+    MatSortModule,
+    NgxMaskModule.forRoot()
+    
   ] /*,
   providers:[
     {

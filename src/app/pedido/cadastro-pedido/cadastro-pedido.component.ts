@@ -26,6 +26,8 @@ import { ActivatedRoute } from "@angular/router";
 import { ErrorHandlerService } from "src/app/shared/error-handler.service";
 import { SnackBarMessageService } from "src/app/shared/snack-bar-message.service";
 import { PedidoService } from "../service/pedido.service";
+import { Cliente } from "src/app/cliente/model/cliente";
+import { ClienteService } from "src/app/cliente/service/cliente.service";
 
 @Component({
   selector: "app-cadastro-pedido",
@@ -39,6 +41,7 @@ export class CadastroPedidoComponent implements OnInit, OnDestroy {
   produtoAutoComplete = new FormControl();
   produtos: Produto[];
   produtosFiltrados$: Observable<Produto[]>;
+  clientesFiltrados$: Observable<Cliente[]>;
   displayedColumns: string[] = [
     "codigo",
     "produto",
@@ -54,13 +57,14 @@ export class CadastroPedidoComponent implements OnInit, OnDestroy {
     private produtoService: ProdutoService,
     private arquivoService: ArquivoService,
     private pedidoService: PedidoService,
+    private clienteService: ClienteService,
     private activatedRoute: ActivatedRoute,
     private errorHandlerService: ErrorHandlerService,
     private snackBarMessageService: SnackBarMessageService
   ) {}
 
   ngOnInit(): void {
-    const formArray: FormArray = this.fb.array([], [Validators.required]);
+    const itensFormArray: FormArray = this.fb.array([], [Validators.required]);
 
     this.pedido = this.activatedRoute.snapshot.data.pedido;
 
@@ -68,18 +72,20 @@ export class CadastroPedidoComponent implements OnInit, OnDestroy {
       this.pedido = new Pedido();
     } else {
       this.pedido.itens.forEach((i) => {
-        formArray.push(new FormControl(i));
-      });
+        itensFormArray.push(new FormControl(i));
+      });      
     }
 
     this.form = this.fb.group({
       id: [this.pedido.id],
-      itens: formArray,
+      itens: itensFormArray,
       total: [this.pedido.total, [Validators.min(0.01)]],
       desconto: [this.pedido.desconto, [Validators.min(0.0)]],
       observacao: [this.pedido.observacao],
       statusPedido: [this.pedido.statusPedido, [Validators.required]],
       dataCriacao: [this.pedido.dataCriacao],
+      cliente: [this.pedido.cliente],
+      username:[{value: this.pedido.username, disabled:true}]
     });
 
     this.form.controls.desconto.valueChanges
@@ -90,13 +96,20 @@ export class CadastroPedidoComponent implements OnInit, OnDestroy {
       filter((value) => value.length > 2),
       debounceTime(500),
       distinctUntilChanged(),
+      takeUntil(this.unsubscribe$),
       switchMap((value) => this.produtoService.porNome(value)),
-      /*
-      tap(() => {
-        if (this.form.controls.itens.value === null) {
-          this.form.controls.itens.setValue([]);
-        }
-      }), */
+      catchError((err) => {
+        this.errorHandlerService.handle(err);
+        return EMPTY;
+      })
+    );
+
+    this.clientesFiltrados$ = this.form.controls["cliente"].valueChanges.pipe(
+      filter((value) => value.length > 3),
+      debounceTime(300),
+      distinctUntilChanged(),
+      takeUntil(this.unsubscribe$),
+      switchMap((value) => this.clienteService.porNome(value)),
       catchError((err) => {
         this.errorHandlerService.handle(err);
         return EMPTY;
@@ -222,6 +235,10 @@ export class CadastroPedidoComponent implements OnInit, OnDestroy {
         );
         console.log("Pedido Cancelado", response);
       });
+  }
+
+  displayFn(cliente: Cliente): string {
+    return cliente && cliente.nome ? cliente.nome : '';
   }
 
   ngOnDestroy(): void {

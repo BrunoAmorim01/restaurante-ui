@@ -21,17 +21,17 @@ table {
 }
 
 
-.row {
+.row-form {
   display: flex;
   flex-direction: row;
 }
 
-.col {
+.col-form {
   flex: 10;
   margin-right: 20px;
 }
 
-.col:last-child {
+.col-form:last-child {
   margin-right: 0;
 }
 

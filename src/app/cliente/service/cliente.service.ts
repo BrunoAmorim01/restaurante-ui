@@ -31,4 +31,10 @@ export class ClienteService extends CrudService<Cliente> {
 
     return this.http.get<any>(this.API_URL, { params }).pipe(take(1));
   }
+
+  porNome(nome) {
+    return this.http.get<Cliente[]>(`${this.API_URL}/por-nome`, {
+      params: new HttpParams().append("nome", nome),
+    });
+  }
 }

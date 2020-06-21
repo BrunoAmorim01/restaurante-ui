@@ -13,10 +13,7 @@ import { OAuthService } from "angular-oauth2-oidc";
   providedIn: "root",
 })
 export class Oauth2Guard implements CanActivate {
-  constructor(
-    private oauthService: OAuthService,
-    private jwt: JwtHelperService
-  ) {}
+  constructor(private oauthService: OAuthService) {}
 
   canActivate(
     next: ActivatedRouteSnapshot,
@@ -28,14 +25,14 @@ export class Oauth2Guard implements CanActivate {
     | UrlTree {
     var hasIdToken = this.oauthService.hasValidIdToken();
     var hasAccessToken = this.oauthService.hasValidAccessToken();
-    //console.debug("claim", this.oauthService.getIdentityClaims());
+    console.debug("claim", this.oauthService.getIdentityClaims());
     //console.debug("scopes", this.oauthService.getGrantedScopes());
 
     if (hasIdToken && hasAccessToken) {
       return true;
     } else {
       this.oauthService.initCodeFlow();
-    return false;
+      //return false;
     }
   }
 }

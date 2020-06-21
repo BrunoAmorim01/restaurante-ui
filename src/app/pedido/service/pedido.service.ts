@@ -9,6 +9,7 @@ import { Injectable } from "@angular/core";
 import { Pedido } from "../model/pedido";
 import * as moment from "moment";
 import { OAuthService } from "angular-oauth2-oidc";
+import { Observable } from "rxjs";
 
 @Injectable({
   providedIn: "root",
@@ -57,7 +58,7 @@ export class PedidoService extends CrudService<Pedido> {
 
     return this.http
       .get<any>(`${environment.API}/pedidos`, {
-        params, //,
+        params,
         //headers,
       })
       .pipe(take(1));
@@ -79,5 +80,13 @@ export class PedidoService extends CrudService<Pedido> {
         params,
       })
       .pipe(take(1));
+  }
+
+  protected novo(entidade: Pedido) {
+    if (!entidade.username) {
+      const claims = this.oauthService.getIdentityClaims() as any;
+      entidade.username = claims.preferred_username;
+    }
+    return this.http.post(this.API_URL, entidade).pipe(take(1));
   }
 }

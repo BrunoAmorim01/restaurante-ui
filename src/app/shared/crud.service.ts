@@ -26,7 +26,7 @@ export class CrudService<T> {
     );*/
   }
 
-  private novo(entidade: T) {
+  protected novo(entidade: T) {
     return this.http.post(this.API_URL, entidade).pipe(take(1));
 
     /*
