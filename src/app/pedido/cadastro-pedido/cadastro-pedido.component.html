@@ -241,7 +241,7 @@
         Salvar
       </button>
       <button
-        *ngIf="form.controls.statusPedido.value != 'CONCLUIDO'"
+        *ngIf="mostrarBtnConcluir()"
         mat-raised-button
         color="primary"
         type="button"
@@ -250,7 +250,7 @@
         Concluir
       </button>
       <button
-        *ngIf="form.controls.statusPedido.value != 'CANCELADO'"
+        *ngIf="mostrarBtnCancelar()"
         mat-raised-button
         color="warn"
         type="button"

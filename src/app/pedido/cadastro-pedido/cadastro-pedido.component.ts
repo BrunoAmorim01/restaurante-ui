@@ -73,7 +73,7 @@ export class CadastroPedidoComponent implements OnInit, OnDestroy {
     } else {
       this.pedido.itens.forEach((i) => {
         itensFormArray.push(new FormControl(i));
-      });      
+      });
     }
 
     this.form = this.fb.group({
@@ -85,7 +85,7 @@ export class CadastroPedidoComponent implements OnInit, OnDestroy {
       statusPedido: [this.pedido.statusPedido, [Validators.required]],
       dataCriacao: [this.pedido.dataCriacao],
       cliente: [this.pedido.cliente],
-      username:[{value: this.pedido.username, disabled:true}]
+      username: [{ value: this.pedido.username, disabled: true }],
     });
 
     this.form.controls.desconto.valueChanges
@@ -222,7 +222,10 @@ export class CadastroPedidoComponent implements OnInit, OnDestroy {
           "Pedido concluido com sucesso!"
         );
         console.log("Pedido Concluido", response);
-      });
+      }),
+      (err) => {
+        this.errorHandlerService.handle(err);
+      };
   }
 
   onCancelarPedido() {
@@ -234,11 +237,29 @@ export class CadastroPedidoComponent implements OnInit, OnDestroy {
           "Pedido cancelado com sucesso!"
         );
         console.log("Pedido Cancelado", response);
-      });
+      }),
+      (err) => {
+        this.errorHandlerService.handle(err);
+      };
   }
 
   displayFn(cliente: Cliente): string {
-    return cliente && cliente.nome ? cliente.nome : '';
+    return cliente && cliente.nome ? cliente.nome : "";
+  }
+
+  mostrarBtnCancelar() {
+    return (
+      this.form.controls["statusPedido"].value === StatusPedido.ABERTO &&
+      this.form.controls["id"].value != null
+    );
+  }
+
+  mostrarBtnConcluir() {
+    return (
+      this.form.controls["statusPedido"].value === StatusPedido.ABERTO &&
+      this.form.controls["id"].value != null &&
+      this.form.controls["total"].value > 0
+    );
   }
 
   ngOnDestroy(): void {
