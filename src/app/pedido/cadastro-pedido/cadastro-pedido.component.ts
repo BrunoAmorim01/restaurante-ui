@@ -28,6 +28,7 @@ import { SnackBarMessageService } from "src/app/shared/snack-bar-message.service
 import { PedidoService } from "../service/pedido.service";
 import { Cliente } from "src/app/cliente/model/cliente";
 import { ClienteService } from "src/app/cliente/service/cliente.service";
+import { EmailService } from '../service/email.service';
 
 @Component({
   selector: "app-cadastro-pedido",
@@ -60,7 +61,8 @@ export class CadastroPedidoComponent implements OnInit, OnDestroy {
     private clienteService: ClienteService,
     private activatedRoute: ActivatedRoute,
     private errorHandlerService: ErrorHandlerService,
-    private snackBarMessageService: SnackBarMessageService
+    private snackBarMessageService: SnackBarMessageService,
+    private emailService:EmailService
   ) {}
 
   ngOnInit(): void {
@@ -125,7 +127,6 @@ export class CadastroPedidoComponent implements OnInit, OnDestroy {
     const formArrayItens: FormArray = this.form.get("itens") as FormArray;
     formArrayItens.push(new FormControl(itemPedido));
 
-    // this.form.controls.itens.value.push(itemPedido);
     this.table.renderRows();
 
     this.produtoAutoComplete.patchValue("");
@@ -140,29 +141,18 @@ export class CadastroPedidoComponent implements OnInit, OnDestroy {
     const formArrayItens: FormArray = this.form.get("itens") as FormArray;
     formArrayItens.controls.forEach((i) => {
       if (i.value.produto.id === rowObj.produto.id) {
-        i.value.quantidade = event.target.value;
-        // .patchValue({'quantidade': event.target.value})
+        i.value.quantidade = event.target.value;        
       }
     });
-
-    /*
-    this.form.controls.itens.value.filter((value) => {
-      if (value.produto.id == row_obj.produto.id) {
-        value.quantidade = event.target.value;
-      }
-      return true;
-    }); */
+    
     this.calcularTotal(formArrayItens);
   }
 
   deleteRowTable(rowObj: FormControl) {
     const formArrayItens: FormArray = this.form.get("itens") as FormArray;
 
-    const index = formArrayItens.controls.findIndex((i) => i.value === rowObj);
-    // const index = this.form.controls.itens.value.indexOf(row_obj);
-    // formArrayItens.controls.splice(index, 1);
-    formArrayItens.removeAt(index);
-    // this.form.controls.itens.value.splice(index, 1);
+    const index = formArrayItens.controls.findIndex((i) => i.value === rowObj);    
+    formArrayItens.removeAt(index);   
 
     this.table.renderRows();
     this.calcularTotal(formArrayItens);
@@ -191,11 +181,7 @@ export class CadastroPedidoComponent implements OnInit, OnDestroy {
 
   onSubmit() {
     if (this.form.valid) {
-      const pedido: Pedido = this.form.value;
-      /*
-      if (!pedido.dataCriacao) {
-        pedido.dataCriacao = new Date();
-      } */
+      const pedido: Pedido = this.form.value;     
 
       this.pedidoService.salvar(pedido).subscribe(
         (response: Pedido) => {
@@ -260,6 +246,14 @@ export class CadastroPedidoComponent implements OnInit, OnDestroy {
       this.form.controls["id"].value != null &&
       this.form.controls["total"].value > 0
     );
+  }
+
+  enviarEmail(){
+    this.emailService.enviarPedido(this.form.controls['id'].value).subscribe(
+      response=>{
+        this.snackBarMessageService.openSnackbar('Email enviado com sucesso')
+      }
+    )
   }
 
   ngOnDestroy(): void {
