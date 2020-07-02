@@ -25,7 +25,7 @@ export class Oauth2Guard implements CanActivate {
     | UrlTree {
     var hasIdToken = this.oauthService.hasValidIdToken();
     var hasAccessToken = this.oauthService.hasValidAccessToken();
-    console.debug("claim", this.oauthService.getIdentityClaims());
+    //console.debug("claim", this.oauthService.getIdentityClaims());
     //console.debug("scopes", this.oauthService.getGrantedScopes());
 
     if (hasIdToken && hasAccessToken) {

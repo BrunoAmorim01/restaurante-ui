@@ -1,7 +1,6 @@
 import { SegurancaModule } from "./seguranca/seguranca.module";
 import { TemplateModule } from "./template/template.module";
 import { SharedModule } from "./shared/shared.module";
-import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
 import { BrowserModule } from "@angular/platform-browser";
 import { NgModule, LOCALE_ID, DEFAULT_CURRENCY_CODE } from "@angular/core";
 import { registerLocaleData } from "@angular/common";
@@ -12,6 +11,7 @@ import { OAuthModule } from "angular-oauth2-oidc";
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { environment } from 'src/environments/environment';
 
 // export const options: Partial<IConfig> | (() => Partial<IConfig>);
 registerLocaleData(localeBr, "pt", localeBrExtra);
@@ -26,7 +26,7 @@ registerLocaleData(localeBr, "pt", localeBrExtra);
     AppRoutingModule,
     OAuthModule.forRoot({
       resourceServer: {
-        allowedUrls: ["http://localhost:8080/"],
+        allowedUrls: [environment.API],
         sendAccessToken: true,
       },
     }),

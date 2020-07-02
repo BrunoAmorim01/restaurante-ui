@@ -28,7 +28,7 @@ import { SnackBarMessageService } from "src/app/shared/snack-bar-message.service
 import { PedidoService } from "../service/pedido.service";
 import { Cliente } from "src/app/cliente/model/cliente";
 import { ClienteService } from "src/app/cliente/service/cliente.service";
-import { EmailService } from '../service/email.service';
+import { EmailService } from "../service/email.service";
 
 @Component({
   selector: "app-cadastro-pedido",
@@ -62,7 +62,7 @@ export class CadastroPedidoComponent implements OnInit, OnDestroy {
     private activatedRoute: ActivatedRoute,
     private errorHandlerService: ErrorHandlerService,
     private snackBarMessageService: SnackBarMessageService,
-    private emailService:EmailService
+    private emailService: EmailService
   ) {}
 
   ngOnInit(): void {
@@ -141,18 +141,18 @@ export class CadastroPedidoComponent implements OnInit, OnDestroy {
     const formArrayItens: FormArray = this.form.get("itens") as FormArray;
     formArrayItens.controls.forEach((i) => {
       if (i.value.produto.id === rowObj.produto.id) {
-        i.value.quantidade = event.target.value;        
+        i.value.quantidade = event.target.value;
       }
     });
-    
+
     this.calcularTotal(formArrayItens);
   }
 
   deleteRowTable(rowObj: FormControl) {
     const formArrayItens: FormArray = this.form.get("itens") as FormArray;
 
-    const index = formArrayItens.controls.findIndex((i) => i.value === rowObj);    
-    formArrayItens.removeAt(index);   
+    const index = formArrayItens.controls.findIndex((i) => i.value === rowObj);
+    formArrayItens.removeAt(index);
 
     this.table.renderRows();
     this.calcularTotal(formArrayItens);
@@ -181,7 +181,7 @@ export class CadastroPedidoComponent implements OnInit, OnDestroy {
 
   onSubmit() {
     if (this.form.valid) {
-      const pedido: Pedido = this.form.value;     
+      const pedido: Pedido = this.form.value;
 
       this.pedidoService.salvar(pedido).subscribe(
         (response: Pedido) => {
@@ -248,12 +248,20 @@ export class CadastroPedidoComponent implements OnInit, OnDestroy {
     );
   }
 
-  enviarEmail(){
-    this.emailService.enviarPedido(this.form.controls['id'].value).subscribe(
-      response=>{
-        this.snackBarMessageService.openSnackbar('Email enviado com sucesso')
-      }
-    )
+  mostrarBtnEnviarEmail() {
+    return (
+      this.form.controls["id"].value != null &&
+      this.form.get("cliente").value != null &&
+      this.form.get("cliente").value.email != null
+    );
+  }
+
+  enviarEmail() {
+    this.emailService
+      .enviarPedido(this.form.controls["id"].value)
+      .subscribe((response) => {
+        this.snackBarMessageService.openSnackbar("Email enviado com sucesso");
+      });
   }
 
   ngOnDestroy(): void {

@@ -1,0 +1,10 @@
+version: '3.8'
+
+services:
+  restaurante-ui:
+    image: restaurante-ui
+    build: 
+      context: .
+      network: host     
+    ports:
+      - 8081:80      
