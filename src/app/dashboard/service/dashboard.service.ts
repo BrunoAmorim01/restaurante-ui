@@ -1,21 +1,33 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { environment } from "src/environments/environment";
-import { take, delay } from "rxjs/operators";
+import { take, shareReplay, retryWhen, delayWhen, tap } from "rxjs/operators";
+import { OAuthService } from "angular-oauth2-oidc";
+import { timer } from "rxjs";
 
 @Injectable({
   providedIn: "root",
 })
 export class DashboardService {
   private API_URL: string;
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private oauthService: OAuthService) {
     this.API_URL = `${environment.API}/dashboard`;
   }
 
   getMediaValorTotalPedidos() {
-    return this.http
+    const valorPedido$ = this.http
       .get<Number>(this.API_URL + "/venda-media-mes-atual")
-      .pipe(take(1), delay(1000));
+      .pipe(
+        shareReplay(),
+        retryWhen((err) => {
+          return err.pipe(
+            delayWhen(() => timer(2000)),
+            tap(() => console.log("retry valor total pedidos"))
+          );
+        })
+      );
+
+    return valorPedido$;
   }
 
   getRankingProdutos() {

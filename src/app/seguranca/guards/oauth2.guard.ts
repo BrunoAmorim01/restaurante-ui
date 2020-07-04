@@ -1,4 +1,3 @@
-import { JwtHelperService } from "@auth0/angular-jwt";
 import { Injectable } from "@angular/core";
 import {
   CanActivate,
@@ -23,16 +22,16 @@ export class Oauth2Guard implements CanActivate {
     | Promise<boolean | UrlTree>
     | boolean
     | UrlTree {
-    var hasIdToken = this.oauthService.hasValidIdToken();
-    var hasAccessToken = this.oauthService.hasValidAccessToken();
     //console.debug("claim", this.oauthService.getIdentityClaims());
     //console.debug("scopes", this.oauthService.getGrantedScopes());
 
-    if (hasIdToken && hasAccessToken) {
-      return true;
-    } else {
-      this.oauthService.initCodeFlow();
-      //return false;
-    }
+    return this.tokenValido();
+  }
+  
+  private tokenValido() {
+    var hasIdToken = this.oauthService.hasValidIdToken();
+    var hasAccessToken = this.oauthService.hasValidAccessToken();
+
+    return hasIdToken && hasAccessToken;
   }
 }

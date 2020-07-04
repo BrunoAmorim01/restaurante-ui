@@ -1,41 +1,75 @@
-<div class="container" [class.is-mobile]="(isHandset$ | async)">
+<div class="container" [class.is-mobile]="isHandset$ | async">
   <mat-toolbar color="primary" class="toolbar">
-    <button type="button" aria-label="Toggle sidenav" mat-icon-button (click)="drawer.toggle()"
-      *ngIf="isHandset$ | async">
+    <button
+      type="button"
+      aria-label="Toggle sidenav"
+      mat-icon-button
+      (click)="drawer.toggle()"
+      *ngIf="isHandset$ | async"
+    >
       <mat-icon aria-label="Side nav toggle icon">menu</mat-icon>
     </button>
     <h1 class="app-name">Restaurante</h1>
-    <a [routerLink]="['/login']"> teste</a>
-    <a *ngIf="isLoggedIn" class="nav-link" [routerLink]="['/logout']" (click)=handleLogout()>Logout</a>
-    <button type="button" (click)="handleLogout()"> Teste logout</button>
-    
+    <div style="position: absolute; right: 0px;">
+      <a [routerLink]="['/login']"> Login</a>
+      <span>{{ nomeUsuario }}</span>
+
+      <button *ngIf="isLoggedIn" mat-icon-button (click)="handleLogout()">
+        <mat-icon>exit_to_app</mat-icon>
+      </button>
+
+      <button *ngIf="!isLoggedIn" mat-icon-button (click)="handleLogin()">
+        <mat-icon>login</mat-icon>
+      </button>
+    </div>
   </mat-toolbar>
-  <mat-sidenav-container class="sidenav-container" [style.marginTop.px]="(isHandset$ | async) ? 56 : 0">
+  <mat-sidenav-container
+    class="sidenav-container"
+    [style.marginTop.px]="(isHandset$ | async) ? 56 : 0"
+  >
     <mat-toolbar>Menu</mat-toolbar>
-    <mat-sidenav #drawer [fixedInViewport]="(isHandset$ | async)" [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
-      [mode]="(isHandset$ | async) ? 'over' : 'side'" [opened]="(isHandset$ | async) === false"
-      fixedTopGap="56">
-      
+    <mat-sidenav
+      #drawer
+      [fixedInViewport]="isHandset$ | async"
+      [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'"
+      [mode]="(isHandset$ | async) ? 'over' : 'side'"
+      [opened]="(isHandset$ | async) === false"
+      fixedTopGap="56"
+    >
       <mat-accordion>
         <a mat-button [routerLink]="['/dashboard']">Dashboard</a>
-        
+
         <mat-expansion-panel>
           <mat-expansion-panel-header>
             Clientes
           </mat-expansion-panel-header>
           <mat-nav-list>
-            <a mat-list-item [routerLink]="['/cliente/novo']" routerLinkActive>Cadastro</a>
-            <a mat-list-item [routerLink]="['/cliente/pesquisa']" routerLinkActive>Pesquisa</a>            
+            <a mat-list-item [routerLink]="['/cliente/novo']" routerLinkActive
+              >Cadastro</a
+            >
+            <a
+              mat-list-item
+              [routerLink]="['/cliente/pesquisa']"
+              routerLinkActive
+              >Pesquisa</a
+            >
           </mat-nav-list>
         </mat-expansion-panel>
-        
+
         <mat-expansion-panel>
           <mat-expansion-panel-header>
             Produtos
           </mat-expansion-panel-header>
           <mat-nav-list>
-            <a mat-list-item [routerLink]="['/produto/novo']" routerLinkActive>Cadastro</a>
-            <a mat-list-item [routerLink]="['/produto/pesquisa']" routerLinkActive>Pesquisa</a>
+            <a mat-list-item [routerLink]="['/produto/novo']" routerLinkActive
+              >Cadastro</a
+            >
+            <a
+              mat-list-item
+              [routerLink]="['/produto/pesquisa']"
+              routerLinkActive
+              >Pesquisa</a
+            >
           </mat-nav-list>
         </mat-expansion-panel>
 
@@ -44,8 +78,15 @@
             Pedidos
           </mat-expansion-panel-header>
           <mat-nav-list>
-            <a mat-list-item [routerLink]="['/pedido/novo']" routerLinkActive>Cadastro</a>
-            <a mat-list-item [routerLink]="['/pedido/pesquisa']" routerLinkActive>Pesquisa</a>
+            <a mat-list-item [routerLink]="['/pedido/novo']" routerLinkActive
+              >Cadastro</a
+            >
+            <a
+              mat-list-item
+              [routerLink]="['/pedido/pesquisa']"
+              routerLinkActive
+              >Pesquisa</a
+            >
           </mat-nav-list>
         </mat-expansion-panel>
 
@@ -54,20 +95,15 @@
             Relatórios
           </mat-expansion-panel-header>
           <mat-nav-list>
-            <a mat-list-item [routerLink]="['/relatorios/']" routerLinkActive>Pedidos</a>            
+            <a mat-list-item [routerLink]="['/relatorios/']" routerLinkActive
+              >Pedidos</a
+            >
           </mat-nav-list>
         </mat-expansion-panel>
-
       </mat-accordion>
-
-
-
     </mat-sidenav>
     <mat-sidenav-content>
-      
       <router-outlet></router-outlet>
-
     </mat-sidenav-content>
   </mat-sidenav-container>
-
 </div>

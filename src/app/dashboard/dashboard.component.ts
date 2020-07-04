@@ -1,18 +1,9 @@
-import { Component, OnInit, ViewChild } from "@angular/core";
-import {
-  map,
-  delay,
-  last,
-  switchMap,
-  concatAll,
-  flatMap,
-  tap,
-} from "rxjs/operators";
+import { Component, OnInit } from "@angular/core";
+import { map, switchMap, tap } from "rxjs/operators";
 import { Breakpoints, BreakpointObserver } from "@angular/cdk/layout";
 import { DashboardService } from "./service/dashboard.service";
 import { Dashboard } from "./model/dashboard";
-import { concat, Observable } from "rxjs";
-import { BarChartComponent } from "./bar-chart/bar-chart.component";
+import { Observable } from "rxjs";
 
 @Component({
   selector: "app-dashboard",
@@ -20,7 +11,6 @@ import { BarChartComponent } from "./bar-chart/bar-chart.component";
   styleUrls: ["./dashboard.component.scss"],
 })
 export class DashboardComponent implements OnInit {
-  /** Based on the screen size, switch from standard to one column per row */
   dashboard = new Dashboard();
   cards;
   media$: Observable<any>;
@@ -30,7 +20,7 @@ export class DashboardComponent implements OnInit {
     private dashboardService: DashboardService
   ) {}
 
-  ngOnInit(): void {
+  ngOnInit() {
     this.cards = this.dashboardService.getMediaValorTotalPedidos().pipe(
       tap((value) => {
         this.dashboard.mediaValorTotalPedidos = value;
@@ -44,11 +34,7 @@ export class DashboardComponent implements OnInit {
         this.dashboard.valorTotalPedidos = value;
       }),
       switchMap(() => cards$)
-    );
-    /*
-      .subscribe((data) => {
-        this.dashboard.mediaValorTotalPedidos = data;
-      });*/
+    );  
 
     var cards$ = this.breakpointObserver.observe(Breakpoints.Handset).pipe(
       map(({ matches }) => {
